@@ -313,7 +313,8 @@ def main():
         "--with-zlib=" + zlib_bundling,
         "--with-version-build=" + str(build_num),
         "--with-version-opt=" + "jvmci-" + jvmci_version,
-        "--with-version-pre="
+        "--with-version-pre=",
+        "--with-jtreg=/Users/cnli/Project/jtreg"
     ]
     if build_arch != 'aarch64':
         configure_options.append("--disable-precompiled-headers")
