@@ -381,39 +381,46 @@ public class GCMBufferTest implements Cloneable {
 
                 // Update operations
                 switch (v) {
-                    case BYTE -> {
-                        byte[] out = new byte[olen];
-                        rlen = cipher.update(pt, dataoffset + inOfs, plen, out,
+                    case BYTE:
+                        {
+                            byte[] out = new byte[olen];
+                            rlen = cipher.update(pt, dataoffset + inOfs, plen, out,
                             outOfs);
-                        ba.write(out, outOfs, rlen);
-                    }
-                    case HEAP -> {
-                        ByteBuffer b = ByteBuffer.allocate(plen + outOfs);
-                        b.position(outOfs);
-                        b.put(pt, dataoffset + inOfs, plen);
-                        b.flip();
-                        b.position(outOfs);
-                        ByteBuffer out = ByteBuffer.allocate(olen);
-                        out.position(outOfs);
-                        rlen = cipher.update(b, out);
-                        ba.write(out.array(), outOfs, rlen);
-                    }
-                    case DIRECT -> {
-                        ByteBuffer b = ByteBuffer.allocateDirect(plen + outOfs);
-                        b.position(outOfs);
-                        b.put(pt, dataoffset + inOfs, plen);
-                        b.flip();
-                        b.position(outOfs);
-                        ByteBuffer out = ByteBuffer.allocateDirect(olen);
-                        out.position(outOfs);
-                        rlen = cipher.update(b, out);
-                        byte[] o = new byte[rlen];
-                        out.flip();
-                        out.position(outOfs);
-                        out.get(o, 0, rlen);
-                        ba.write(o);
-                    }
-                    default -> throw new Exception("Unknown op: " + v.name());
+                            ba.write(out, outOfs, rlen);
+                            break;
+                        }
+                    case HEAP:
+                        {
+                            ByteBuffer b = ByteBuffer.allocate(plen + outOfs);
+                            b.position(outOfs);
+                            b.put(pt, dataoffset + inOfs, plen);
+                            b.flip();
+                            b.position(outOfs);
+                            ByteBuffer out = ByteBuffer.allocate(olen);
+                            out.position(outOfs);
+                            rlen = cipher.update(b, out);
+                            ba.write(out.array(), outOfs, rlen);
+                            break;
+                        }
+                    case DIRECT:
+                        {
+                            ByteBuffer b = ByteBuffer.allocateDirect(plen + outOfs);
+                            b.position(outOfs);
+                            b.put(pt, dataoffset + inOfs, plen);
+                            b.flip();
+                            b.position(outOfs);
+                            ByteBuffer out = ByteBuffer.allocateDirect(olen);
+                            out.position(outOfs);
+                            rlen = cipher.update(b, out);
+                            byte[] o = new byte[rlen];
+                            out.flip();
+                            out.position(outOfs);
+                            out.get(o, 0, rlen);
+                            ba.write(o);
+                            break;
+                        }
+                    default:
+                        throw new Exception("Unknown op: " + v.name());
                 }
 
                 if (theoreticalCheck) {
@@ -434,43 +441,50 @@ public class GCMBufferTest implements Cloneable {
 
                 int olen = cipher.getOutputSize(plen) + outOfs;
                 switch (v) {
-                    case BYTE -> {
-                        byte[] out = new byte[olen];
-                        rlen = cipher.doFinal(pt, dataoffset + inOfs,
-                            plen, out, outOfs);
-                        ba.write(out, outOfs, rlen);
-                    }
-                    case HEAP -> {
-                        ByteBuffer b = ByteBuffer.allocate(plen + inOfs);
-                        b.limit(b.capacity());
-                        b.position(inOfs);
-                        b.put(pt, dataoffset + inOfs, plen);
-                        b.flip();
-                        b.position(inOfs);
-                        ByteBuffer out = ByteBuffer.allocate(olen);
-                        out.limit(out.capacity());
-                        out.position(outOfs);
-                        rlen = cipher.doFinal(b, out);
-                        ba.write(out.array(), outOfs, rlen);
-                    }
-                    case DIRECT -> {
-                        ByteBuffer b = ByteBuffer.allocateDirect(plen + inOfs);
-                        b.limit(b.capacity());
-                        b.position(inOfs);
-                        b.put(pt, dataoffset + inOfs, plen);
-                        b.flip();
-                        b.position(inOfs);
-                        ByteBuffer out = ByteBuffer.allocateDirect(olen);
-                        out.limit(out.capacity());
-                        out.position(outOfs);
-                        rlen = cipher.doFinal(b, out);
-                        byte[] o = new byte[rlen];
-                        out.flip();
-                        out.position(outOfs);
-                        out.get(o, 0, rlen);
-                        ba.write(o);
-                    }
-                    default -> throw new Exception("Unknown op: " + v.name());
+                    case BYTE:
+                        {
+                            byte[] out = new byte[olen];
+                            rlen = cipher.doFinal(pt, dataoffset + inOfs,
+                                plen, out, outOfs);
+                            ba.write(out, outOfs, rlen);
+                            break;
+                        }
+                    case HEAP:
+                        {
+                            ByteBuffer b = ByteBuffer.allocate(plen + inOfs);
+                            b.limit(b.capacity());
+                            b.position(inOfs);
+                            b.put(pt, dataoffset + inOfs, plen);
+                            b.flip();
+                            b.position(inOfs);
+                            ByteBuffer out = ByteBuffer.allocate(olen);
+                            out.limit(out.capacity());
+                            out.position(outOfs);
+                            rlen = cipher.doFinal(b, out);
+                            ba.write(out.array(), outOfs, rlen);
+                            break;
+                        }
+                    case DIRECT:
+                        {
+                            ByteBuffer b = ByteBuffer.allocateDirect(plen + inOfs);
+                            b.limit(b.capacity());
+                            b.position(inOfs);
+                            b.put(pt, dataoffset + inOfs, plen);
+                            b.flip();
+                            b.position(inOfs);
+                            ByteBuffer out = ByteBuffer.allocateDirect(olen);
+                            out.limit(out.capacity());
+                            out.position(outOfs);
+                            rlen = cipher.doFinal(b, out);
+                            byte[] o = new byte[rlen];
+                            out.flip();
+                            out.position(outOfs);
+                            out.get(o, 0, rlen);
+                            ba.write(o);
+                            break;
+                        }
+                    default:
+                        throw new Exception("Unknown op: " + v.name());
                 }
 
                 if (theoreticalCheck && rlen != olen - outOfs) {
@@ -532,17 +546,17 @@ public class GCMBufferTest implements Cloneable {
 
         // Prepare data
         switch (ops.get(0)) {
-            case HEAP -> {
+            case HEAP:
                 bbin = ByteBuffer.wrap(data);
                 bbin.limit(input.length + inOfs);
                 bbout = bbin.duplicate();
-            }
-            case DIRECT -> {
+                break;
+            case DIRECT:
                 bbin = ByteBuffer.allocateDirect(data.length);
                 bbout = bbin.duplicate();
                 bbin.put(data, 0, input.length + inOfs);
                 bbin.flip();
-            }
+                break;
         }
 
         // Set data limits for bytebuffers
@@ -556,16 +570,18 @@ public class GCMBufferTest implements Cloneable {
         for (dtype v : ops) {
             if (index < ops.size() - 1) {
                 switch (v) {
-                    case BYTE -> {
+                    case BYTE:
                         rlen = cipher.update(data, dataoffset + inOfs, plen,
                             data, len + outOfs);
-                    }
-                    case HEAP, DIRECT -> {
+                        break;
+                    case HEAP:
+                    case DIRECT:
                         theorticallen = bbin.remaining() -
                             (bbin.remaining() % AESBLOCK);
                         rlen = cipher.update(bbin, bbout);
-                    }
-                    default -> throw new Exception("Unknown op: " + v.name());
+                        break;
+                    default:
+                        throw new Exception("Unknown op: " + v.name());
                 }
 
                 // Check that the theoretical return value matches the actual.
@@ -584,18 +600,20 @@ public class GCMBufferTest implements Cloneable {
                 plen = input.length - dataoffset;
 
                 switch (v) {
-                    case BYTE -> {
+                    case BYTE:
                         rlen = cipher.doFinal(data, dataoffset + inOfs,
                             plen, data, len + outOfs);
                         out = Arrays.copyOfRange(data, 0,len + rlen + outOfs);
-                    }
-                    case HEAP, DIRECT -> {
+                        break;
+                    case HEAP:
+                    case DIRECT:
                         rlen = cipher.doFinal(bbin, bbout);
                         bbout.flip();
                         out = new byte[bbout.remaining()];
                         bbout.get(out);
-                    }
-                    default -> throw new Exception("Unknown op: " + v.name());
+                        break;
+                    default:
+                        throw new Exception("Unknown op: " + v.name());
                 }
                 len += rlen;
 

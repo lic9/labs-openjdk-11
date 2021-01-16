@@ -68,7 +68,7 @@ public class OverlapByteBuffer {
                 byte[] buffer;
                 // Create overlapping input and output buffers
                 switch (i) {
-                    case 0 -> {
+                    case 0:
                         buffer = new byte[bufferSize];
                         output = ByteBuffer.wrap(buffer, outOfsInBuf, sliceLen).
                             slice();
@@ -76,8 +76,8 @@ public class OverlapByteBuffer {
                             slice();
                         System.out.println("Using array-backed ByteBuffer");
                         in = input.duplicate();
-                    }
-                    case 1 -> {
+                        break;
+                    case 1:
                         buffer = new byte[bufferSize];
                         output = ByteBuffer.wrap(buffer, outOfsInBuf, sliceLen).
                             slice();
@@ -86,8 +86,8 @@ public class OverlapByteBuffer {
 
                         System.out.println("Using read-only array-backed " + "ByteBuffer");
                         in = input.asReadOnlyBuffer();
-                    }
-                    case 2 -> {
+                        break;
+                    case 2:
                         System.out.println("Using direct ByteBuffer");
                         ByteBuffer buf = ByteBuffer.allocateDirect(bufferSize);
                         output = buf.duplicate();
@@ -101,10 +101,9 @@ public class OverlapByteBuffer {
                         input = input.slice();
 
                         in = input.duplicate();
-                    }
-                    default -> {
+                        break;
+                    default:
                         throw new Exception("Unknown index " + i);
-                    }
                 }
 
                 // Copy data into shared buffer
